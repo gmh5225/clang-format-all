@@ -149,8 +149,13 @@ int main(int argc, char* argv[], char* envp[])
 		formatExecPath = std::filesystem::path(std::string(llvm) + "/bin/clang-format" + exeStem);
 		if (!std::filesystem::is_regular_file(formatExecPath))
 		{
-			log(ERROR, "Clang-format executable not found, could not proceed.");
-			return RET_CLANG_FORMAT_EXEC_NOT_FOUND;
+			formatExecPath = std::filesystem::path(std::string("clang-format") + exeStem);
+			if (!std::filesystem::is_regular_file(formatExecPath))
+			{
+				log(ERROR, "Clang-format executable not found, could not proceed.");
+				return RET_CLANG_FORMAT_EXEC_NOT_FOUND;
+			}
+
 		}
 	}
 	log(DISPLAY, "Using clang-format: %s", formatExecPath.generic_string().data());
